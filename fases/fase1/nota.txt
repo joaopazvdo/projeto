@@ -1,0 +1,6 @@
+Uma espécie de caça ao tesouro, por enquanto ainda é o protótipo, a ideia é que o jogador se localize através do mapa e ache os tesouros que vão aparecendo a medida que se acha um novo
+tesouro. Cada tesouro é uma coordenada para a proxima fase.
+Ainda falta texturizar, adicionar as imagens dos personagens, e as imagens de fundo. Além de que posso adicionar novas funcionalidades com o tempo (não obrigatório)
+
+Ideias:
+Expandir o mapa com uma tecla
