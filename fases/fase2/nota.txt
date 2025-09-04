@@ -1,0 +1,10 @@
+Protótipo da fase 2, seria uma espécie de flapbird onde o jogador vai passar por montanhas e planaltos até chegar a uma planice. 
+
+Tem ainda um problema, que é implementar que o jogador não passe do teto nem passe do chão, nesse caso estou pensando em fazer uma análise do sinal da velocidade
+além disso falta adicionar os obstáculos, no qual estou com a ideia de fazer uma lista de obstáculos gerada aleatoriamente ou não, independentemente disso, a lista será gerada antes
+do inicio do jogo, depois que um obstáculo some da lista eu deleto ele e outro aparece.
+
+Além disso, após eu terminar o protótipo vai ser preciso personalizar e se der tempo adicionar ideias novas.
+
+Ideias:
+Por enquanto nenhuma
