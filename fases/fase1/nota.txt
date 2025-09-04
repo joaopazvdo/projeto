@@ -1,0 +1,5 @@
+Protótipo da primeira fase, uma espécie de caça ao tesouro onde o jogador vai ter que se localizar pelo mapa para saber onde está o tesouro, cada tesouro é uma coordenada para a próxima
+fase.
+O protótipo está feito, agora falta texturizar e personalizar, talvez se der tempo adicionar algumas ideias.
+Ideias:
+Expandir o mapa ao apertar um botão.
