@@ -8,3 +8,8 @@ Além disso, após eu terminar o protótipo vai ser preciso personalizar e se de
 
 Ideias:
 Por enquanto nenhuma
+
+
+
+Implementei a lista de obstáculos e o perder se tocar num obstáculo, no ceu ou no chao
+Falta fazer a adptação de mudança de tela realmente.
