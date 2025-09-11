@@ -3,3 +3,6 @@ fase.
 O protótipo está feito, agora falta texturizar e personalizar, talvez se der tempo adicionar algumas ideias.
 Ideias:
 Expandir o mapa ao apertar um botão.
+
+Adaptações para entrar no novo padrão de classes
+

@@ -1,109 +1,16 @@
 import pygame
-from random import randint
+import sys
+sys.path.append("../../utils")
+from cores import cores
+from classes import Jogador
+from classes import Tesouro
+from classes import Tela
 
-class Jogador:
-    def __init__(self, x, y, largura, altura, velocidade, cor):
-        self.x = x
-        self.y = y
-        self.largura = largura
-        self.altura = altura
-        self.cor = cor
-        self.jogador = pygame.Rect(self.x, self.y, self.largura, self.altura)
-        self.velocidade = velocidade
-
-    def criar_jogador_no_mapa(self, x, y, mapa):
-        self.no_mapa = pygame.Rect(x, y, self.largura * mapa.escala, self.altura * mapa.escala)
-
-
-    def movimento_fase1(self, keys, TELA, tesouro, mapa):
-        ponto = 0
-        esta_no_fundo = self.jogador.y >= (TELA.ALTURA - self.altura)
-        esta_no_topo = self.jogador.y <= 0
-        esta_no_final = self.jogador.x >= (TELA.LARGURA - self.largura) 
-        esta_no_comeco = self.jogador.x <= 0
-        #BAIXO
-        if keys[pygame.K_DOWN] and not esta_no_fundo:
-            self.y += self.velocidade
-            self.jogador.y += self.velocidade
-            self.no_mapa.y += self.velocidade * mapa.escala
-
-
-        #CIMA
-        if keys[pygame.K_UP] and not esta_no_topo:
-            self.y -= self.velocidade
-            self.jogador.y -= self.velocidade
-            self.no_mapa.y -= self.velocidade * mapa.escala
-
-        #DIREITA
-        if keys[pygame.K_RIGHT] and not esta_no_final:
-            self.x += self.velocidade
-            self.jogador.x += self.velocidade
-            self.no_mapa.x += self.velocidade * mapa.escala
-
-        #ESQUERDA
-        if keys[pygame.K_LEFT] and not esta_no_comeco: 
-            self.x -= self.velocidade
-            self.jogador.x -= self.velocidade
-            self.no_mapa.x -= self.velocidade * mapa.escala
-
-        if self.jogador.colliderect(tesouro.tesouro):
-            tesouro.muda_posicao(TELA, mapa)
-            ponto += 1
-
-        return ponto 
-
-
-class Tesouro:
-    def __init__(self, x, y, largura, altura, cor):
-        self.x = x
-        self.y = y
-        self.largura = largura
-        self.altura = altura
-        self.cor = cor
-        self.tesouro = pygame.Rect(self.x, self.y, self.largura, self.altura)
-
-
-    def muda_posicao(self, TELA, mapa):
-        while True:
-            self.x = randint(0, TELA.LARGURA - self.largura)
-            self.y = randint(0, TELA.ALTURA - self.altura)
-            esta_atras_do_mapa = self.x > mapa.posicao_x and self.y > mapa.posicao_y
-            if not esta_atras_do_mapa: break
-        self.tesouro.x, self.tesouro.y = self.x, self.y
-        self.no_mapa.x, self.no_mapa.y = self.x * mapa.escala, self.y * mapa.escala
-
-    def criar_tesouro_no_mapa(self, x, y, mapa):
-        self.no_mapa = pygame.Rect(x, y, self.largura * mapa.escala, self.altura * mapa.escala)
-
-
-class Tela:
-    def __init__(self, LARGURA, ALTURA, cor):
-        self.ALTURA = ALTURA
-        self.LARGURA = LARGURA
-        self.cor = cor
-        self.tela = pygame.display.set_mode((self.LARGURA, self.ALTURA), pygame.FULLSCREEN)
-        self.TAMANHO = (self.LARGURA, self.ALTURA)
-
-
-class Mapa(Tela):
-    def __init__(self, largura_tela, altura_tela, escala, cor):
-        self.escala = escala
-        self.largura = largura_tela
-        self.largura = self.largura * self.escala
-        self.altura = altura_tela  
-        self.altura = self.altura * self.escala 
-        self.tamanho = (self.largura, self.altura)
-        self.posicao_x = largura_tela - self.largura
-        self.posicao_y = altura_tela - self.altura
-        self.cor = cor
-        self.mapa = pygame.Surface((self.largura, self.altura)) 
-
-
-def desenha_inicio_jogo(TELA, mapa, jogador, tesouro, pontuacao):
+def desenha_inicio_jogo(TELA, jogador, tesouro, pontuacao):
     PONTUACAO_MAXIMA = 10
     if pontuacao < PONTUACAO_MAXIMA:
         TELA.tela.fill(TELA.cor)
-        mapa.mapa.fill(mapa.cor)
+        TELA.mapa.fill(TELA.cor_mapa)
 
         fonte = pygame.font.Font(None, 30)
         texto = fonte.render(f'Pontos: {pontuacao}', False, cores['branco'])
@@ -112,10 +19,10 @@ def desenha_inicio_jogo(TELA, mapa, jogador, tesouro, pontuacao):
         pygame.draw.rect(TELA.tela, jogador.cor, jogador.jogador)
         pygame.draw.rect(TELA.tela, tesouro.cor, tesouro.tesouro)
         
-        pygame.draw.rect(mapa.mapa, jogador.cor, jogador.no_mapa)
-        pygame.draw.rect(mapa.mapa, tesouro.cor, tesouro.no_mapa)
+        pygame.draw.rect(TELA.mapa, jogador.cor, jogador.no_mapa)
+        pygame.draw.rect(TELA.mapa, tesouro.cor, tesouro.no_mapa)
 
-        TELA.tela.blit(mapa.mapa, (mapa.posicao_x, mapa.posicao_y))
+        TELA.tela.blit(TELA.mapa, (TELA.mapa_pos_x, TELA.mapa_pos_y))
 
     else:
         TELA.tela.fill(cores['dourado'])
@@ -125,21 +32,48 @@ def desenha_inicio_jogo(TELA, mapa, jogador, tesouro, pontuacao):
         TELA.tela.blit(texto, ((TELA.LARGURA - largura_texto) // 2, (TELA.ALTURA - altura_texto) // 2))
 
 
+def movimentacao(keys, jogador, TELA, tesouro):
+    if keys[pygame.K_UP]:
+        jogador.move_para_cima()
     
+    if keys[pygame.K_DOWN]:
+        jogador.move_para_baixo()
+    
+    if keys[pygame.K_LEFT]:
+        jogador.move_para_esquerda()
+    
+    if keys[pygame.K_RIGHT]:
+        jogador.move_para_direita()
+
+    if jogador.jogador.colliderect(tesouro.tesouro):
+        tesouro.muda_posicao()
+        return 1 
+
+    return 0
+
+
 def main():
     global cores
     pygame.init()
 
     info = pygame.display.Info()
-    TELA = Tela(info.current_w, info.current_h, cores['mar'])
+    TELA = Tela(info.current_w, info.current_h)
+    TELA.cor = cores['mar']
     pygame.display.set_caption("Caça ao Tesouro (FASE 1)")
 
-    mapa = Mapa(TELA.LARGURA, TELA.ALTURA, (1/5), cores['mapa'])
+    TELA.cria_mapa((1/5))
+    TELA.cor_mapa = cores['mapa']
+    TELA.mapa_pos_x = TELA.LARGURA - TELA.largura_mapa
+    TELA.mapa_pos_y = TELA.ALTURA - TELA.altura_mapa
 
-    jogador = Jogador(TELA.LARGURA // 2, TELA.ALTURA // 2, 45, 45, 10, cores['marrom'])
-    jogador.criar_jogador_no_mapa((mapa.largura // 2), (mapa.altura // 2), mapa)
-    tesouro = Tesouro(10, 10, 45, 45, cores['dourado'])
-    tesouro.criar_tesouro_no_mapa(10 * mapa.escala, 10 * mapa.escala, mapa)
+    jogador = Jogador(50, 50, 2.3, 4.1, TELA)
+    jogador.cor = cores['marrom']
+    jogador.velocidade = (0.5 / 100) * TELA.LARGURA
+    jogador.criar_jogador_no_mapa(jogador.jogador.x * TELA.escala_mapa, jogador.jogador.y * TELA.escala_mapa)
+
+    tesouro = Tesouro(0.5, 0.9, 2.3, 4.1, TELA)
+    tesouro.cor = cores['dourado']
+    tesouro.criar_tesouro_no_mapa(tesouro.tesouro.y * TELA.escala_mapa, tesouro.tesouro.y * TELA.escala_mapa)
 
     clock = pygame.time.Clock()
     FPS = 60
@@ -147,7 +81,7 @@ def main():
     pontuacao = 0
     rodando = True
     while rodando:
-        desenha_inicio_jogo(TELA, mapa, jogador, tesouro, pontuacao)
+        desenha_inicio_jogo(TELA, jogador, tesouro, pontuacao)
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 rodando = False
@@ -157,19 +91,11 @@ def main():
                     rodando = False
 
         keys = pygame.key.get_pressed()
-        pontuacao += jogador.movimento_fase1(keys, TELA, tesouro, mapa)
+        pontuacao += movimentacao(keys, jogador, TELA, tesouro)
         pygame.display.flip()
         clock.tick(FPS)
     pygame.quit()
 
-
-cores = {
-'mapa':(245,222,179),
-'mar':(0,105,148),
-'marrom':(139,69,19),
-'dourado':(255,245,0),
-'branco':(255,255,255),
-    }
 
 if __name__ == '__main__':
     main()
