@@ -5,6 +5,7 @@ from cores import cores
 from classes import Tela
 from classes import Jogador
 from classes import Obstaculo_Fase2
+from random import randint
 
 def desenha_jogo(TELA, jogador, obstaculos, planice):
     TELA.tela.fill(TELA.cor)
@@ -43,10 +44,17 @@ def cria_lista_obstaculos(num_obstaculos, distancia_entre_obstaculos, TELA):
     obstaculos = num_obstaculos * [None]
     x_obstaculo = 100
     for i in range(num_obstaculos):
-       montanha = Obstaculo_Fase2(x_obstaculo, 35, 20.3, 65, TELA)
-       obstaculos[i] = montanha
-       x_obstaculo += distancia_entre_obstaculos
+        selecao = randint(0, 3) 
+        montanha = Obstaculo_Fase2(x_obstaculo, 20, 20.3, 80, TELA)
+        planalto = Obstaculo_Fase2(x_obstaculo, 35, 65, 65, TELA)
+        if selecao == 0:
+            obstaculo = planalto
 
+        else:
+            obstaculo = montanha
+
+        obstaculos[i] = obstaculo
+        x_obstaculo += distancia_entre_obstaculos
     return obstaculos
 
 def mecanica_fase2(TELA, jogador, obstaculos, planice):
@@ -57,14 +65,19 @@ def mecanica_fase2(TELA, jogador, obstaculos, planice):
     keys = pygame.key.get_pressed()
     movimentacao(keys, jogador)
 
-    for montanha in obstaculos:
-        montanha.move_constante_para_esquerda()
-        if montanha.obstaculo.x + montanha.largura <= 0:
-            obstaculos.remove(montanha)
+    removidos = 0
+    for i in range(len(obstaculos)):
+        i -= removidos
 
-        if montanha.obstaculo.colliderect(jogador.jogador):
+        if obstaculos[i].obstaculo.colliderect(jogador.jogador):
             perdeu = True
             rodando = False
+
+        obstaculos[i].move_constante_para_esquerda()
+        if obstaculos[i].obstaculo.x + obstaculos[i].largura <= 0:
+            obstaculos.pop(i)
+            removidos += 1
+
 
     if jogador.jogador.y <= 0:
         perdeu = True
@@ -96,7 +109,7 @@ def main():
     TELA.cor = cores['ceu']
 
     jogador = Jogador(7.8, 30, 2.3, 4.1, TELA)
-    obstaculos = cria_lista_obstaculos(1, 75 + 20.3, TELA) 
+    obstaculos = cria_lista_obstaculos(10, 75 + 20.3, TELA) 
     planice = Obstaculo_Fase2(100, 95.9, 50, 4.1, TELA)
 
     clock = pygame.time.Clock()
