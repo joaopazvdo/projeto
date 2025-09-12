@@ -9,3 +9,6 @@ Desfiz a classe Mapa, agora o mapa é um elemento da tela, agora é Tela.mapa
 Tirei o objeto cor da Tela.
 
 Mudei os objetos das classes, Jogador, Tesouro e Obstaculo_Fase2, para que fiquem responsivos com porcentagem.
+
+
+Mudar o objeto das classes para rect, para padronizar
