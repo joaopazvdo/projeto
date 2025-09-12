@@ -1,1 +1,4 @@
 Falta mudar nas duas fases a questão de mudar de tela quando perde ou ganha (feito)
+
+
+Percebi que preciso padronizar os objetos de retângulos das classes que são retângulos, para optimizar uso de linhas de código.
