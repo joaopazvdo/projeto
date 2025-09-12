@@ -13,3 +13,6 @@ Por enquanto nenhuma
 
 Implementei a lista de obstáculos e o perder se tocar num obstáculo, no ceu ou no chao
 Falta fazer a adptação de mudança de tela realmente.
+
+
+Fiz a adpatação de mudança de tela, para quando perder ou ganhar o jogo parar de rodar e aparecer a mensagem ganhou ou perdeu.
