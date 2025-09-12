@@ -6,30 +6,28 @@ from classes import Jogador
 from classes import Tesouro
 from classes import Tela
 
-def desenha_inicio_jogo(TELA, jogador, tesouro, pontuacao):
-    PONTUACAO_MAXIMA = 10
-    if pontuacao < PONTUACAO_MAXIMA:
-        TELA.tela.fill(TELA.cor)
-        TELA.mapa.fill(TELA.cor_mapa)
+def desenha_jogo(TELA, jogador, tesouro, pontuacao):
+    TELA.tela.fill(TELA.cor)
+    TELA.mapa.fill(TELA.cor_mapa)
 
-        fonte = pygame.font.Font(None, 30)
-        texto = fonte.render(f'Pontos: {pontuacao}', False, cores['branco'])
-        TELA.tela.blit(texto, ((TELA.LARGURA - texto.get_size()[0]) // 2, 0))
-        
-        pygame.draw.rect(TELA.tela, jogador.cor, jogador.jogador)
-        pygame.draw.rect(TELA.tela, tesouro.cor, tesouro.tesouro)
-        
-        pygame.draw.rect(TELA.mapa, jogador.cor, jogador.no_mapa)
-        pygame.draw.rect(TELA.mapa, tesouro.cor, tesouro.no_mapa)
+    fonte = pygame.font.Font(None, 30)
+    texto = fonte.render(f'Pontos: {pontuacao}', False, cores['branco'])
+    TELA.tela.blit(texto, ((TELA.LARGURA - texto.get_size()[0]) // 2, 0))
+    
+    pygame.draw.rect(TELA.tela, jogador.cor, jogador.jogador)
+    pygame.draw.rect(TELA.tela, tesouro.cor, tesouro.tesouro)
+    
+    pygame.draw.rect(TELA.mapa, jogador.cor, jogador.no_mapa)
+    pygame.draw.rect(TELA.mapa, tesouro.cor, tesouro.no_mapa)
 
-        TELA.tela.blit(TELA.mapa, (TELA.mapa_pos_x, TELA.mapa_pos_y))
+    TELA.tela.blit(TELA.mapa, (TELA.mapa_pos_x, TELA.mapa_pos_y))
 
-    else:
-        TELA.tela.fill(cores['dourado'])
-        fonte = pygame.font.Font(None, 150)
-        texto = fonte.render('Parabéns', False, cores['branco'])
-        largura_texto, altura_texto = texto.get_size()
-        TELA.tela.blit(texto, ((TELA.LARGURA - largura_texto) // 2, (TELA.ALTURA - altura_texto) // 2))
+def desenha_tela_ganhador(TELA):
+    TELA.tela.fill(cores['dourado'])
+    fonte = pygame.font.Font(None, 150)
+    texto = fonte.render('Parabéns', False, cores['branco'])
+    largura_texto, altura_texto = texto.get_size()
+    TELA.tela.blit(texto, ((TELA.LARGURA - largura_texto) // 2, (TELA.ALTURA - altura_texto) // 2))
 
 
 def movimentacao(keys, jogador, TELA, tesouro):
@@ -53,7 +51,6 @@ def movimentacao(keys, jogador, TELA, tesouro):
 
 
 def main():
-    global cores
     pygame.init()
 
     info = pygame.display.Info()
@@ -79,9 +76,11 @@ def main():
     FPS = 60
 
     pontuacao = 0
+    PONTUACAO_MAXIMA = 10
     rodando = True
+    ganhou = False
     while rodando:
-        desenha_inicio_jogo(TELA, jogador, tesouro, pontuacao)
+        desenha_jogo(TELA, jogador, tesouro, pontuacao)
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 rodando = False
@@ -92,8 +91,25 @@ def main():
 
         keys = pygame.key.get_pressed()
         pontuacao += movimentacao(keys, jogador, TELA, tesouro)
+        if pontuacao >= PONTUACAO_MAXIMA:
+            ganhou = True
+            rodando = False
         pygame.display.flip()
         clock.tick(FPS)
+
+    while ganhou:
+        desenha_tela_ganhador(TELA)
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                ganhou = False
+
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_ESCAPE:
+                    ganhou = False
+
+        pygame.display.flip()
+        clock.tick(FPS)
+
     pygame.quit()
 
 
