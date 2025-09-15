@@ -69,7 +69,7 @@ def main():
 
     jogador = Jogador(50, 50, 2.3, 4.1, TELA)
     jogador.cor = cores['marrom']
-    jogador.velocidade = (0.5 / 100) * TELA.LARGURA
+    jogador.define_velocidade(0.5)
     jogador.criar_jogador_no_mapa(jogador.retangulo.x * TELA.escala_mapa, jogador.retangulo.y * TELA.escala_mapa)
 
     tesouro = Tesouro(0.5, 0.9, 2.3, 4.1, TELA)
