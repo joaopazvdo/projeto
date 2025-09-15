@@ -19,27 +19,43 @@ class Jogador:
         esta_no_topo = self.retangulo.y <= 0
         if not esta_no_topo:
             self.retangulo.y -= self.velocidade
-            self.no_mapa.y -= self.velocidade * self.tela.escala_mapa
 
 
     def move_para_baixo(self):
         esta_em_baixo = self.retangulo.y >= (self.tela.ALTURA - self.altura)
         if not esta_em_baixo:
             self.retangulo.y += self.velocidade
-            self.no_mapa.y += self.velocidade * self.tela.escala_mapa
 
 
     def move_para_esquerda(self):
         esta_no_comeco = self.retangulo.x <= 0
         if not esta_no_comeco:
             self.retangulo.x -= self.velocidade
-            self.no_mapa.x -= self.velocidade * self.tela.escala_mapa
 
 
     def move_para_direita(self):
         esta_no_final = self.retangulo.x >= (self.tela.LARGURA - self.largura) 
         if not esta_no_final:
             self.retangulo.x += self.velocidade
+
+    def move_para_cima_no_mapa(self):
+        esta_no_topo = self.retangulo.y <= 0
+        if not esta_no_topo:
+            self.no_mapa.y -= self.velocidade * self.tela.escala_mapa
+
+    def move_para_baixo_no_mapa(self):
+        esta_em_baixo = self.retangulo.y >= (self.tela.ALTURA - self.altura)
+        if not esta_em_baixo:
+            self.no_mapa.y += self.velocidade * self.tela.escala_mapa
+
+    def move_para_esquerda_no_mapa(self):
+        esta_no_comeco = self.retangulo.x <= 0
+        if not esta_no_comeco:
+            self.no_mapa.x -= self.velocidade * self.tela.escala_mapa
+
+    def move_para_direita_no_mapa(self):
+        esta_no_final = self.retangulo.x >= (self.tela.LARGURA - self.largura) 
+        if not esta_no_final:
             self.no_mapa.x += self.velocidade * self.tela.escala_mapa
 
 
