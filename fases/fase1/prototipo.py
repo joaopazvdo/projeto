@@ -14,8 +14,8 @@ def desenha_jogo(TELA, jogador, tesouro, pontuacao):
     texto = fonte.render(f'Pontos: {pontuacao}', False, cores['branco'])
     TELA.tela.blit(texto, ((TELA.LARGURA - texto.get_size()[0]) // 2, 0))
     
-    pygame.draw.rect(TELA.tela, jogador.cor, jogador.jogador)
-    pygame.draw.rect(TELA.tela, tesouro.cor, tesouro.tesouro)
+    pygame.draw.rect(TELA.tela, jogador.cor, jogador.retangulo)
+    pygame.draw.rect(TELA.tela, tesouro.cor, tesouro.retangulo)
     
     pygame.draw.rect(TELA.mapa, jogador.cor, jogador.no_mapa)
     pygame.draw.rect(TELA.mapa, tesouro.cor, tesouro.no_mapa)
@@ -43,7 +43,7 @@ def movimentacao(keys, jogador, TELA, tesouro):
     if keys[pygame.K_RIGHT]:
         jogador.move_para_direita()
 
-    if jogador.jogador.colliderect(tesouro.tesouro):
+    if jogador.retangulo.colliderect(tesouro.retangulo):
         tesouro.muda_posicao()
         return 1 
 
@@ -66,11 +66,11 @@ def main():
     jogador = Jogador(50, 50, 2.3, 4.1, TELA)
     jogador.cor = cores['marrom']
     jogador.velocidade = (0.5 / 100) * TELA.LARGURA
-    jogador.criar_jogador_no_mapa(jogador.jogador.x * TELA.escala_mapa, jogador.jogador.y * TELA.escala_mapa)
+    jogador.criar_jogador_no_mapa(jogador.retangulo.x * TELA.escala_mapa, jogador.retangulo.y * TELA.escala_mapa)
 
     tesouro = Tesouro(0.5, 0.9, 2.3, 4.1, TELA)
     tesouro.cor = cores['dourado']
-    tesouro.criar_tesouro_no_mapa(tesouro.tesouro.y * TELA.escala_mapa, tesouro.tesouro.y * TELA.escala_mapa)
+    tesouro.criar_tesouro_no_mapa(tesouro.retangulo.y * TELA.escala_mapa, tesouro.retangulo.y * TELA.escala_mapa)
 
     clock = pygame.time.Clock()
     FPS = 60

@@ -11,4 +11,4 @@ Tirei o objeto cor da Tela.
 Mudei os objetos das classes, Jogador, Tesouro e Obstaculo_Fase2, para que fiquem responsivos com porcentagem.
 
 
-Mudar o objeto das classes para rect, para padronizar
+Mudar o objeto das classes para rect, para padronizar(mudei)

@@ -9,12 +9,12 @@ from random import randint
 
 def desenha_jogo(TELA, jogador, obstaculos, planice):
     TELA.tela.fill(TELA.cor)
-    pygame.draw.rect(TELA.tela, jogador.cor, jogador.jogador)
+    pygame.draw.rect(TELA.tela, jogador.cor, jogador.retangulo)
     for montanha in obstaculos:
-        pygame.draw.rect(TELA.tela, montanha.cor, montanha.obstaculo)
+        pygame.draw.rect(TELA.tela, montanha.cor, montanha.retangulo)
 
     if obstaculos == []:
-        pygame.draw.rect(TELA.tela, planice.cor, planice.obstaculo)
+        pygame.draw.rect(TELA.tela, planice.cor, planice.retangulo)
 
 
 def desenha_tela_perdeu(TELA):
@@ -69,32 +69,32 @@ def mecanica_fase2(TELA, jogador, obstaculos, planice):
     for i in range(len(obstaculos)):
         i -= removidos
 
-        if obstaculos[i].obstaculo.colliderect(jogador.jogador):
+        if obstaculos[i].retangulo.colliderect(jogador.retangulo):
             perdeu = True
             rodando = False
 
         obstaculos[i].move_constante_para_esquerda()
-        if obstaculos[i].obstaculo.x + obstaculos[i].largura <= 0:
+        if obstaculos[i].retangulo.x + obstaculos[i].largura <= 0:
             obstaculos.pop(i)
             removidos += 1
 
 
-    if jogador.jogador.y <= 0:
+    if jogador.retangulo.y <= 0:
         perdeu = True
         rodando = False
 
-    if jogador.jogador.y >= TELA.ALTURA - jogador.altura:
+    if jogador.retangulo.y >= TELA.ALTURA - jogador.altura:
         perdeu = True
         rodando = False
 
     if obstaculos == []:
-        if jogador.jogador.x < TELA.LARGURA * 60/100:
-            jogador.jogador.x += planice.velocidade
+        if jogador.retangulo.x < TELA.LARGURA * 60/100:
+            jogador.retangulo.x += planice.velocidade
 
-        if planice.obstaculo.x > TELA.LARGURA * 50/100:
+        if planice.retangulo.x > TELA.LARGURA * 50/100:
             planice.move_constante_para_esquerda()
 
-    if planice.obstaculo.colliderect(jogador.jogador):
+    if planice.retangulo.colliderect(jogador.retangulo):
         ganhou = True
         rodando = False
 

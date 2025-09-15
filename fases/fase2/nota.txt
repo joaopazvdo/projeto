@@ -18,3 +18,6 @@ Falta fazer a adptação de mudança de tela realmente.
 Fiz a adpatação de mudança de tela, para quando perder ou ganhar o jogo parar de rodar e aparecer a mensagem ganhou ou perdeu.
 Mudei o remove das montanhas para pop e acessei por indice.
 Adicionei o randint na criação dos obstáculos para ele selecionar aleatoriamente se o obstáculo vai ser montanha ou planalto, montanha tem 3x mais chance de aparecer
+
+
+Mudei os objetos das classes que são retangulos para self.retangulo

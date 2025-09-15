@@ -8,3 +8,6 @@ Adaptações para entrar no novo padrão de classes
 
 
 Modificação para parar de rodar o jogo quando ganhar
+
+
+Modificação dos objetos das classes que são retangulo, agora são self.retangulo.
