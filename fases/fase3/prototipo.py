@@ -23,11 +23,11 @@ def movimentacao(keys, jogador):
 
 def desenha_jogo(TELA, jogador, entrada_manguezal, entrada_deserto, entrada_savana, entrada_floresta_tropical):
     TELA.tela.fill(TELA.cor)
-    pygame.draw.rect(TELA.tela, jogador.cor, jogador.jogador) 
-    pygame.draw.rect(TELA.tela, entrada_manguezal.cor, entrada_manguezal.obstaculo) 
-    pygame.draw.rect(TELA.tela, entrada_deserto.cor, entrada_deserto.obstaculo) 
-    pygame.draw.rect(TELA.tela, entrada_savana.cor, entrada_savana.obstaculo) 
-    pygame.draw.rect(TELA.tela, entrada_floresta_tropical.cor, entrada_floresta_tropical.obstaculo) 
+    pygame.draw.rect(TELA.tela, jogador.cor, jogador.retangulo) 
+    pygame.draw.rect(TELA.tela, entrada_manguezal.cor, entrada_manguezal.retangulo) 
+    pygame.draw.rect(TELA.tela, entrada_deserto.cor, entrada_deserto.retangulo) 
+    pygame.draw.rect(TELA.tela, entrada_savana.cor, entrada_savana.retangulo) 
+    pygame.draw.rect(TELA.tela, entrada_floresta_tropical.cor, entrada_floresta_tropical.retangulo) 
     
 def main():
     pygame.init()
