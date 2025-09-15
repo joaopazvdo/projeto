@@ -33,15 +33,19 @@ def desenha_tela_ganhador(TELA):
 def movimentacao(keys, jogador, TELA, tesouro):
     if keys[pygame.K_UP]:
         jogador.move_para_cima()
+        jogador.move_para_cima_no_mapa()
     
     if keys[pygame.K_DOWN]:
         jogador.move_para_baixo()
+        jogador.move_para_baixo_no_mapa()
     
     if keys[pygame.K_LEFT]:
         jogador.move_para_esquerda()
+        jogador.move_para_esquerda_no_mapa()
     
     if keys[pygame.K_RIGHT]:
         jogador.move_para_direita()
+        jogador.move_para_direita_no_mapa()
 
     if jogador.retangulo.colliderect(tesouro.retangulo):
         tesouro.muda_posicao()
