@@ -4,8 +4,10 @@ sys.path.append("../../utils")
 from cores import cores
 from classes import Tela
 from classes import Jogador
-from classes import Obstaculo_Fase2
+from classes import Retangulo
 from random import randint
+from funcoes_principais import fim
+from funcoes_principais import pulo_e_queda
 
 def desenha_jogo(TELA, jogador, obstaculos, planice):
     TELA.tela.fill(TELA.cor)
@@ -33,20 +35,13 @@ def desenha_tela_ganhou(TELA):
     TELA.tela.blit(texto, ((TELA.LARGURA - largura_texto) // 2, ((TELA.ALTURA - altura_texto) // 2)))
 
 
-def movimentacao(keys, jogador):
-    if keys[pygame.K_SPACE]:
-        jogador.pular()
-
-    jogador.queda_constante()
-
-
 def cria_lista_obstaculos(num_obstaculos, distancia_entre_obstaculos, TELA):
     obstaculos = num_obstaculos * [None]
     x_obstaculo = 100
     for i in range(num_obstaculos):
         selecao = randint(0, 3) 
-        montanha = Obstaculo_Fase2(x_obstaculo, 20, 20.3, 80, TELA)
-        planalto = Obstaculo_Fase2(x_obstaculo, 35, 65, 65, TELA)
+        montanha = Retangulo(x_obstaculo, 20, 20.3, 80, TELA)
+        planalto = Retangulo(x_obstaculo, 35, 65, 65, TELA)
         if selecao == 0:
             obstaculo = planalto
 
@@ -57,13 +52,15 @@ def cria_lista_obstaculos(num_obstaculos, distancia_entre_obstaculos, TELA):
         x_obstaculo += distancia_entre_obstaculos
     return obstaculos
 
+
 def mecanica_fase2(TELA, jogador, obstaculos, planice):
     rodando = True
     perdeu = False
     ganhou = False
 
-    keys = pygame.key.get_pressed()
-    movimentacao(keys, jogador)
+    if obstaculos:
+        keys = pygame.key.get_pressed()
+        pulo_e_queda(keys, jogador)
 
     removidos = 0
     for i in range(len(obstaculos)):
@@ -80,6 +77,7 @@ def mecanica_fase2(TELA, jogador, obstaculos, planice):
 
 
     if jogador.retangulo.y <= 0:
+        print('a')
         perdeu = True
         rodando = False
 
@@ -88,11 +86,15 @@ def mecanica_fase2(TELA, jogador, obstaculos, planice):
         rodando = False
 
     if obstaculos == []:
-        if jogador.retangulo.x < TELA.LARGURA * 60/100:
+        if jogador.retangulo.x < planice.retangulo.x * 150/100:
             jogador.retangulo.x += planice.velocidade
+
+        if jogador.retangulo.y + jogador.altura < planice.retangulo.y:
+            jogador.retangulo.y += planice.velocidade * 0.50
 
         if planice.retangulo.x > TELA.LARGURA * 50/100:
             planice.move_constante_para_esquerda()
+
 
     if planice.retangulo.colliderect(jogador.retangulo):
         ganhou = True
@@ -109,8 +111,9 @@ def main():
     TELA.cor = cores['ceu']
 
     jogador = Jogador(7.8, 30, 2.3, 4.1, TELA)
-    obstaculos = cria_lista_obstaculos(10, 75 + 20.3, TELA) 
-    planice = Obstaculo_Fase2(100, 95.9, 50, 4.1, TELA)
+    jogador.gravidade = (TELA.ALTURA/600) * 0.25
+    obstaculos = cria_lista_obstaculos(1, 75 + 20.3, TELA) 
+    planice = Retangulo(100, 95.9, 50, 4.1, TELA)
 
     clock = pygame.time.Clock()
     FPS = 60
@@ -121,39 +124,21 @@ def main():
 
     while rodando:
         desenha_jogo(TELA, jogador, obstaculos, planice)
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                rodando = False
-
-            if evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_ESCAPE:
-                    rodando = False
-
+        if fim(): break
         rodando, ganhou, perdeu = mecanica_fase2(TELA, jogador, obstaculos, planice)
+        if not rodando: break
         pygame.display.flip()
         clock.tick(FPS)
 
     while perdeu:
         desenha_tela_perdeu(TELA)
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                perdeu = False
-            if evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_ESCAPE:
-                    perdeu = False
-
+        if fim(): break
         pygame.display.flip()
         clock.tick(FPS)
 
     while ganhou:
         desenha_tela_ganhou(TELA)
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                ganhou = False
-            if evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_ESCAPE:
-                    ganhou = False
-
+        if fim(): break
         pygame.display.flip()
         clock.tick(FPS)
 

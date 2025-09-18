@@ -6,10 +6,10 @@ from cores import cores
 from classes import Jogador
 from classes import Tela
 from classes import Tesouro
-from classes import Obstaculo_Fase2
-from funcoes_principais import movimentacao
-from funcoes_principais import movimentacao_no_mapa
-from funcoes_principais import verifica_fim
+from classes import Retangulo
+from funcoes_principais import cima_baixo_esquerda_direita
+from funcoes_principais import cima_baixo_esquerda_direita_no_mapa
+from funcoes_principais import fim
 
 def desenha_inicio(TELA, jogador, entradas, pontuacao):
     TELA.tela.fill(TELA.cor)
@@ -108,10 +108,10 @@ def cria_listas_de_tesouros(TELA):
 
 def cria_saidas(TELA):
     saidas = {}
-    saidas['manguezal'] = Obstaculo_Fase2(90, 90, 10, 10, TELA)
-    saidas['deserto'] = Obstaculo_Fase2(0, 90, 10, 10, TELA)
-    saidas['savana'] = Obstaculo_Fase2(90, 0, 10, 10, TELA)
-    saidas['floresta_tropical'] = Obstaculo_Fase2(0, 0, 10, 10, TELA)
+    saidas['manguezal'] = Retangulo(90, 90, 10, 10, TELA)
+    saidas['deserto'] = Retangulo(0, 90, 10, 10, TELA)
+    saidas['savana'] = Retangulo(90, 0, 10, 10, TELA)
+    saidas['floresta_tropical'] = Retangulo(0, 0, 10, 10, TELA)
     for b in saidas:
         saidas[b].cor = cores['branco']
     return saidas
@@ -127,10 +127,10 @@ def main():
     saidas = cria_saidas(TELA)
 
     entradas_para_bioma = {}
-    entradas_para_bioma['manguezal'] = Obstaculo_Fase2(0, 0, 10, 10, TELA)
-    entradas_para_bioma['deserto'] = Obstaculo_Fase2(90, 0, 10, 10, TELA)
-    entradas_para_bioma['savana'] = Obstaculo_Fase2(0, 90, 10, 10, TELA)
-    entradas_para_bioma['floresta_tropical'] = Obstaculo_Fase2(90, 90, 10, 10, TELA)
+    entradas_para_bioma['manguezal'] = Retangulo(0, 0, 10, 10, TELA)
+    entradas_para_bioma['deserto'] = Retangulo(90, 0, 10, 10, TELA)
+    entradas_para_bioma['savana'] = Retangulo(0, 90, 10, 10, TELA)
+    entradas_para_bioma['floresta_tropical'] = Retangulo(90, 90, 10, 10, TELA)
     for b in entradas_para_bioma:
         entradas_para_bioma[b].cor = cores[b]
 
@@ -145,7 +145,7 @@ def main():
         if ambiente == 'inicio':
             TELA.cor = cores['branco']
             desenha_inicio(TELA, jogadores['inicio'], entradas_para_bioma, pontuacao)
-            movimentacao(keys, jogadores['inicio'])
+            cima_baixo_esquerda_direita(keys, jogadores['inicio'])
             for b in entradas_para_bioma:
                 if jogadores['inicio'].retangulo.colliderect(entradas_para_bioma[b].retangulo):
                     ambiente = b
@@ -162,8 +162,8 @@ def main():
             saidas['manguezal'].cria_no_mapa()
             for tesouro in tesouros['manguezal']:
                 tesouro.cria_no_mapa()
-            movimentacao(keys, jogadores['manguezal'])
-            movimentacao_no_mapa(keys, jogadores['manguezal'])
+            cima_baixo_esquerda_direita(keys, jogadores['manguezal'])
+            cima_baixo_esquerda_direita_no_mapa(keys, jogadores['manguezal'])
 
         if ambiente == 'deserto':
             TELA.cor = cores[ambiente]
@@ -173,8 +173,8 @@ def main():
             saidas['deserto'].cria_no_mapa()
             for tesouro in tesouros['deserto']:
                 tesouro.cria_no_mapa()
-            movimentacao(keys, jogadores['deserto'])
-            movimentacao_no_mapa(keys, jogadores['deserto'])
+            cima_baixo_esquerda_direita(keys, jogadores['deserto'])
+            cima_baixo_esquerda_direita_no_mapa(keys, jogadores['deserto'])
 
         if ambiente == 'savana':
             TELA.cor = cores[ambiente]
@@ -184,8 +184,8 @@ def main():
             saidas['savana'].cria_no_mapa()
             for tesouro in tesouros['savana']:
                 tesouro.cria_no_mapa()
-            movimentacao(keys, jogadores['savana'])
-            movimentacao_no_mapa(keys, jogadores['savana'])
+            cima_baixo_esquerda_direita(keys, jogadores['savana'])
+            cima_baixo_esquerda_direita_no_mapa(keys, jogadores['savana'])
 
         if ambiente == 'floresta_tropical':
             TELA.cor = cores[ambiente]
@@ -195,10 +195,10 @@ def main():
             saidas['floresta_tropical'].cria_no_mapa()
             for tesouro in tesouros['floresta_tropical']:
                 tesouro.cria_no_mapa()
-            movimentacao(keys, jogadores['floresta_tropical'])
-            movimentacao_no_mapa(keys, jogadores['floresta_tropical'])
+            cima_baixo_esquerda_direita(keys, jogadores['floresta_tropical'])
+            cima_baixo_esquerda_direita_no_mapa(keys, jogadores['floresta_tropical'])
             
-        rodando = verifica_fim()
+        if fim(): break
         pygame.display.flip()
         clock.tick(FPS)
     pygame.quit()

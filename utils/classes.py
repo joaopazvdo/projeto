@@ -11,9 +11,21 @@ class Jogador:
         self.retangulo = pygame.Rect((x / 100) * self.tela.LARGURA, (y / 100) * self.tela.ALTURA, self.largura, self.altura)
         self.cor = cores['preto']
         self.velocidade = 0
+        self.gravidade = 0
 
-    def criar_jogador_no_mapa(self, x, y):
-        self.no_mapa = pygame.Rect(x, y, self.largura * self.tela.escala_mapa, self.altura * self.tela.escala_mapa)
+    def define_posicao(self, x, y):
+        self.retangulo.x = (x / 100) * self.tela.LARGURA
+        self.retangulo.y = (y / 100) * self.tela.ALTURA
+
+    def define_velocidade(self, porcentagem_velocidade):
+            self.velocidade = (porcentagem_velocidade / 100) * self.tela.LARGURA
+
+    def cria_no_mapa(self):
+        x_mapa = self.retangulo.x * self.tela.escala_mapa
+        y_mapa = self.retangulo.y * self.tela.escala_mapa
+        largura_no_mapa = self.largura * self.tela.escala_mapa
+        altura_no_mapa = self.altura * self.tela.escala_mapa
+        self.no_mapa = pygame.Rect(x_mapa, y_mapa, largura_no_mapa, altura_no_mapa)
 
     def move_para_cima(self):
         esta_no_topo = self.retangulo.y <= 0
@@ -60,8 +72,7 @@ class Jogador:
 
 
     def queda_constante(self):
-        gravidade = (self.tela.ALTURA / 600) * 0.25
-        self.velocidade += gravidade
+        self.velocidade += self.gravidade
         self.retangulo.y += self.velocidade
 
 
@@ -78,17 +89,28 @@ class Tesouro:
         self.cor = cores['preto']
 
 
-    def muda_posicao(self):
+    def muda_posicao(self, lista_elem_evitar):
+        colidiu = False
         while True:
             novo_x = randint(0, self.tela.LARGURA - int(self.largura))
             novo_y = randint(0, self.tela.ALTURA - int(self.altura))
-            esta_atras_do_mapa = novo_x > self.tela.mapa_pos_x and novo_y > self.tela.mapa_pos_y
-            if not esta_atras_do_mapa: break
-        self.retangulo.x, self.retangulo.y = novo_x, novo_y
-        self.no_mapa.x, self.no_mapa.y = novo_x * self.tela.escala_mapa, novo_y * self.tela.escala_mapa
+            self.retangulo.x, self.retangulo.y = novo_x, novo_y
+            for e in lista_elem_evitar:
+                if self.retangulo.colliderect(e): 
+                    colidiu = True
+            if not colidiu: break
 
-    def criar_tesouro_no_mapa(self, x, y):
-        self.no_mapa = pygame.Rect(x, y, self.largura * self.tela.escala_mapa, self.altura * self.tela.escala_mapa)
+
+    def atualiza_pos_no_mapa(self):
+        self.no_mapa.x = self.retangulo.x * self.tela.escala_mapa
+        self.no_mapa.y = self.retangulo.y * self.tela.escala_mapa
+
+    def cria_no_mapa(self):
+        x_mapa = self.retangulo.x * self.tela.escala_mapa
+        y_mapa = self.retangulo.y * self.tela.escala_mapa
+        largura_no_mapa = self.largura * self.tela.escala_mapa
+        altura_no_mapa = self.altura * self.tela.escala_mapa
+        self.no_mapa = pygame.Rect(x_mapa, y_mapa, largura_no_mapa, altura_no_mapa)
 
 
 class Tela:
@@ -99,14 +121,16 @@ class Tela:
         self.TAMANHO = (self.LARGURA, self.ALTURA)
         self.cor = cores['branco']
 
-    def cria_mapa(self, escala):
+    def cria_mapa(self, escala, x, y):
         self.escala_mapa = escala
         self.largura_mapa = self.LARGURA * self.escala_mapa
         self.altura_mapa = self.ALTURA * self.escala_mapa
+        self.mapa_pos_x = (x / 100) * self.LARGURA
+        self.mapa_pos_y = (y / 100) * self.ALTURA
         self.mapa = pygame.Surface((self.largura_mapa, self.altura_mapa))
 
 
-class Obstaculo_Fase2:
+class Retangulo:
     def __init__(self, x, y, largura, altura, tela):
         self.tela = tela
         self.largura = (largura / 100) * self.tela.LARGURA
@@ -119,4 +143,10 @@ class Obstaculo_Fase2:
     def move_constante_para_esquerda(self):
         self.retangulo.x -= self.velocidade
 
+    def cria_no_mapa(self):
+        x_mapa = self.retangulo.x * self.tela.escala_mapa
+        y_mapa = self.retangulo.y * self.tela.escala_mapa
+        largura_no_mapa = self.largura * self.tela.escala_mapa
+        altura_no_mapa = self.altura * self.tela.escala_mapa
+        self.no_mapa = pygame.Rect(x_mapa, y_mapa, largura_no_mapa, altura_no_mapa)
 
