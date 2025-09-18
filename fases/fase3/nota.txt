@@ -1,1 +1,4 @@
 Comecei a criar a fase, mas logo notei a falta de uma padronização nas classes que são retângulos para optimização de linhas
+
+
+Protótipo terminado, quando eu for personalizar preciso definir certinho a posição de cada tesouro
