@@ -10,5 +10,7 @@ cores = {
 'deserto':(244,164,96),
 'savana':(170,140,80),
 'floresta_tropical':(34,139,34),
+'pedra':(70,70,70),
+'madeira':(160,82,45),
     }
 
