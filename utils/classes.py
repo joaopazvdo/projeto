@@ -103,7 +103,6 @@ class Tesouro:
 
 
     def muda_posicao(self, lista_elem_evitar):
-        colidiu = False
         while True:
             colidiu = False
             novo_x = randint(0, self.tela.LARGURA - int(self.largura))

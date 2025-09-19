@@ -14,7 +14,7 @@ from cores import cores
 from funcoes_principais import roda_perdeu
 from funcoes_principais import roda_ganhou
 
-def desenha_jogo(TELA, jogador, margens, obstaculos, tesouro, mar):
+def desenha_jogo(TELA, jogador, margens, obstaculos, tesouro, mar, pontuacao):
     TELA.tela.fill(TELA.cor)
     if tesouro.aparece:
         pygame.draw.rect(TELA.tela, tesouro.cor, tesouro.retangulo)
@@ -24,6 +24,10 @@ def desenha_jogo(TELA, jogador, margens, obstaculos, tesouro, mar):
         pygame.draw.rect(TELA.tela, margens[d].cor, margens[d].retangulo)
     pygame.draw.rect(TELA.tela, mar.cor, mar.retangulo)
     pygame.draw.rect(TELA.tela, jogador.cor, jogador.retangulo)
+
+    fonte = pygame.font.Font(None, 30)
+    texto = fonte.render(f'Pontos: {pontuacao}', False, cores['branco'])
+    TELA.tela.blit(texto, ((TELA.LARGURA - texto.get_size()[0]) // 2, 0))
 
 
 def cria_obstaculos(TELA):
@@ -173,7 +177,7 @@ def main():
     perdeu = False
     ganhou = False
     while rodando:
-        desenha_jogo(TELA, jogador, margens, obstaculos[c], tesouros[c], mar)
+        desenha_jogo(TELA, jogador, margens, obstaculos[c], tesouros[c], mar, pontuacao)
         if fim(): break
         movimentacao_jogador(jogador, margens)
         rodando, perdeu, c, obstaculos, tesouros = movimentacao_obstaculos(TELA, jogador,obstaculos, 

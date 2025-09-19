@@ -5,17 +5,15 @@ from cores import cores
 from classes import Jogador
 from classes import Tesouro
 from classes import Tela
+from classes import Retangulo
 from funcoes_principais import cima_baixo_esquerda_direita
 from funcoes_principais import cima_baixo_esquerda_direita_no_mapa
 from funcoes_principais import fim
+from funcoes_principais import roda_ganhou
 
 def desenha_jogo(TELA, jogador, tesouro, pontuacao):
     TELA.tela.fill(TELA.cor)
     TELA.mapa.fill(TELA.cor_mapa)
-
-    fonte = pygame.font.Font(None, 30)
-    texto = fonte.render(f'Pontos: {pontuacao}', False, cores['branco'])
-    TELA.tela.blit(texto, ((TELA.LARGURA - texto.get_size()[0]) // 2, 0))
     
     pygame.draw.rect(TELA.tela, jogador.cor, jogador.retangulo)
     pygame.draw.rect(TELA.tela, tesouro.cor, tesouro.retangulo)
@@ -25,12 +23,9 @@ def desenha_jogo(TELA, jogador, tesouro, pontuacao):
 
     TELA.tela.blit(TELA.mapa, (TELA.mapa_pos_x, TELA.mapa_pos_y))
 
-def desenha_tela_ganhador(TELA):
-    TELA.tela.fill(cores['dourado'])
-    fonte = pygame.font.Font(None, 150)
-    texto = fonte.render('Parabéns', False, cores['branco'])
-    largura_texto, altura_texto = texto.get_size()
-    TELA.tela.blit(texto, ((TELA.LARGURA - largura_texto) // 2, (TELA.ALTURA - altura_texto) // 2))
+    fonte = pygame.font.Font(None, 30)
+    texto = fonte.render(f'Pontos: {pontuacao}', False, cores['branco'])
+    TELA.tela.blit(texto, ((TELA.LARGURA - texto.get_size()[0]) // 2, 0))
 
 
 def main():
@@ -43,7 +38,7 @@ def main():
 
     TELA.cria_mapa((1/5), 80, 80)
     TELA.cor_mapa = cores['mapa']
-    retangulo_mapa = pygame.Rect(80, 80, 20, 20)
+    retangulo_mapa = Retangulo(80,80,20,20,TELA)
 
     jogador = Jogador(50, 50, 2.3, 4.1, TELA)
     jogador.cor = cores['marrom']
@@ -77,11 +72,8 @@ def main():
         pygame.display.flip()
         clock.tick(FPS)
 
-    while ganhou:
-        desenha_tela_ganhador(TELA)
-        if fim(): break
-        pygame.display.flip()
-        clock.tick(FPS)
+    if ganhou:
+        roda_ganhou(TELA)
 
     pygame.quit()
 

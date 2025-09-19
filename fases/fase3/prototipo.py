@@ -10,39 +10,24 @@ from classes import Retangulo
 from funcoes_principais import cima_baixo_esquerda_direita
 from funcoes_principais import cima_baixo_esquerda_direita_no_mapa
 from funcoes_principais import fim
+from funcoes_principais import roda_ganhou
 
 def desenha_inicio(TELA, jogador, entradas, pontuacao):
     TELA.tela.fill(TELA.cor)
-    fonte = pygame.font.Font(None, 30)
-    texto = fonte.render(f'Pontos: {pontuacao}', False, cores['preto'])
-    tamanho_texto = texto.get_size()
-    TELA.tela.blit(texto, ((TELA.LARGURA - tamanho_texto[0]) // 2, 0))
     for bioma in entradas:
         pygame.draw.rect(TELA.tela, entradas[bioma].cor, entradas[bioma].retangulo)
     pygame.draw.rect(TELA.tela, jogador.cor, jogador.retangulo)
 
-
-def regras_biomas(jogador, lista_de_tesouros, saida, ambiente, pontuacao):
-    if lista_de_tesouros:
-        if jogador.retangulo.colliderect(lista_de_tesouros[0].retangulo):
-            lista_de_tesouros.pop(0)
-            pontuacao += 1
-
-    if jogador.retangulo.colliderect(saida.retangulo):
-        ambiente = 'inicio'
-
-    return pontuacao, ambiente
+    fonte = pygame.font.Font(None, 30)
+    texto = fonte.render(f'Pontos: {pontuacao}', False, cores['preto'])
+    tamanho_texto = texto.get_size()
+    TELA.tela.blit(texto, ((TELA.LARGURA - tamanho_texto[0]) // 2, 0))
 
 
 def desenha_bioma(TELA, ambiente, jogador, lista_de_tesouros, saida, pontuacao):
     TELA.cor = cores[ambiente]
     TELA.tela.fill(TELA.cor)
     TELA.mapa.fill(TELA.cor_mapa)
-
-    fonte = pygame.font.Font(None, 30)
-    texto = fonte.render(f'Pontos: {pontuacao}', False, cores['branco'])
-    tamanho_texto = texto.get_size()
-    TELA.tela.blit(texto, ((TELA.LARGURA - tamanho_texto[0]) // 2, 0))
     
     if lista_de_tesouros:
         pygame.draw.rect(TELA.tela, lista_de_tesouros[0].cor, lista_de_tesouros[0].retangulo)
@@ -55,6 +40,23 @@ def desenha_bioma(TELA, ambiente, jogador, lista_de_tesouros, saida, pontuacao):
     pygame.draw.rect(TELA.mapa, saida.cor, saida.no_mapa)
 
     TELA.tela.blit(TELA.mapa, (TELA.mapa_pos_x, TELA.mapa_pos_y))
+
+    fonte = pygame.font.Font(None, 30)
+    texto = fonte.render(f'Pontos: {pontuacao}', False, cores['branco'])
+    tamanho_texto = texto.get_size()
+    TELA.tela.blit(texto, ((TELA.LARGURA - tamanho_texto[0]) // 2, 0))
+
+
+def regras_biomas(jogador, lista_de_tesouros, saida, ambiente, pontuacao):
+    if lista_de_tesouros:
+        if jogador.retangulo.colliderect(lista_de_tesouros[0].retangulo):
+            lista_de_tesouros.pop(0)
+            pontuacao += 1
+
+    if jogador.retangulo.colliderect(saida.retangulo):
+        ambiente = 'inicio'
+
+    return pontuacao, ambiente
 
 
 def cria_jogadores(TELA):
@@ -100,7 +102,7 @@ def cria_listas_de_tesouros(TELA):
 
     tesouros['floresta_tropical'] = [None for _ in range(4)]
     for i in range(len(tesouros['floresta_tropical'])):
-        tesouros['floresta_tropical'][i] = Tesouro(0.5, 0.9, 2.3, 4.1, TELA)
+        tesouros['floresta_tropical'][i] = Tesouro(90, 0, 2.3, 4.1, TELA)
         tesouros['floresta_tropical'][i].cor = cores['dourado'] 
 
     return tesouros
@@ -117,6 +119,15 @@ def cria_saidas(TELA):
     return saidas
 
 
+def cria_entradas(TELA):
+    entradas = {}
+    entradas['manguezal'] = Retangulo(0, 0, 10, 10, TELA)
+    entradas['deserto'] = Retangulo(90, 0, 10, 10, TELA)
+    entradas['savana'] = Retangulo(0, 90, 10, 10, TELA)
+    entradas['floresta_tropical'] = Retangulo(90, 90, 10, 10, TELA)
+    return entradas
+
+
 def main():
     pygame.init()
     info = pygame.display.Info()
@@ -126,13 +137,9 @@ def main():
     tesouros = cria_listas_de_tesouros(TELA)
     saidas = cria_saidas(TELA)
 
-    entradas_para_bioma = {}
-    entradas_para_bioma['manguezal'] = Retangulo(0, 0, 10, 10, TELA)
-    entradas_para_bioma['deserto'] = Retangulo(90, 0, 10, 10, TELA)
-    entradas_para_bioma['savana'] = Retangulo(0, 90, 10, 10, TELA)
-    entradas_para_bioma['floresta_tropical'] = Retangulo(90, 90, 10, 10, TELA)
-    for b in entradas_para_bioma:
-        entradas_para_bioma[b].cor = cores[b]
+    entradas = cria_entradas(TELA)
+    for b in entradas:
+        entradas[b].cor = cores[b]
 
     clock = pygame.time.Clock()
     FPS = 60
@@ -140,21 +147,24 @@ def main():
     pontuacao = 0
     ambiente = 'inicio'
     rodando = True
+    ganhou = False
     while rodando:
         keys = pygame.key.get_pressed()
         if ambiente == 'inicio':
             TELA.cor = cores['branco']
-            desenha_inicio(TELA, jogadores['inicio'], entradas_para_bioma, pontuacao)
+            desenha_inicio(TELA, jogadores['inicio'], entradas, pontuacao)
             cima_baixo_esquerda_direita(keys, jogadores['inicio'])
-            for b in entradas_para_bioma:
-                if jogadores['inicio'].retangulo.colliderect(entradas_para_bioma[b].retangulo):
+            for b in entradas:
+                if jogadores['inicio'].retangulo.colliderect(entradas[b].retangulo):
                     ambiente = b
-
         else:
-            desenha_bioma(TELA, ambiente, jogadores[ambiente], tesouros[ambiente], saidas[ambiente], pontuacao)
-            pontuacao, ambiente = regras_biomas(jogadores[ambiente], tesouros[ambiente], saidas[ambiente], ambiente, pontuacao)
+            desenha_bioma(TELA, ambiente, jogadores[ambiente], 
+                          tesouros[ambiente], saidas[ambiente], pontuacao)
+            pontuacao, ambiente = regras_biomas(jogadores[ambiente], tesouros[ambiente], 
+                                                saidas[ambiente], ambiente, pontuacao)
 
         if ambiente == 'manguezal':
+            jogadores['inicio'].define_posicao(11,11)
             TELA.cor = cores[ambiente]
             TELA.cria_mapa((1/5), 0, 0)
             TELA.cor_mapa = cores['mapa']
@@ -166,6 +176,7 @@ def main():
             cima_baixo_esquerda_direita_no_mapa(keys, jogadores['manguezal'])
 
         if ambiente == 'deserto':
+            jogadores['inicio'].define_posicao(87.7,11)
             TELA.cor = cores[ambiente]
             TELA.cria_mapa((1/5), 80, 0)
             TELA.cor_mapa = cores['mapa']
@@ -177,6 +188,7 @@ def main():
             cima_baixo_esquerda_direita_no_mapa(keys, jogadores['deserto'])
 
         if ambiente == 'savana':
+            jogadores['inicio'].define_posicao(11,85.9)
             TELA.cor = cores[ambiente]
             TELA.cria_mapa((1/5), 0, 80)
             TELA.cor_mapa = cores['mapa']
@@ -188,6 +200,7 @@ def main():
             cima_baixo_esquerda_direita_no_mapa(keys, jogadores['savana'])
 
         if ambiente == 'floresta_tropical':
+            jogadores['inicio'].define_posicao(87.7,85.9)
             TELA.cor = cores[ambiente]
             TELA.cria_mapa((1/5), 0, 80)
             TELA.cor_mapa = cores['mapa']
@@ -199,8 +212,14 @@ def main():
             cima_baixo_esquerda_direita_no_mapa(keys, jogadores['floresta_tropical'])
             
         if fim(): break
+        if [v for v in tesouros.values()] == [[],[],[],[]]:
+            ganhou = True
+            rodando = False
+            break
         pygame.display.flip()
         clock.tick(FPS)
+    if ganhou:
+        roda_ganhou(TELA)
     pygame.quit()
                                                   
 
