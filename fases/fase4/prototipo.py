@@ -82,31 +82,6 @@ def cria_tesouros(TELA):
     return tesouros
 
 
-def regras_tesouro(TELA, jogador, tesouro, elementos):
-    pontuacao = 0
-    tesouro.move_constante_para_baixo()
-    if jogador.retangulo.colliderect(tesouro.retangulo):
-        tesouro.muda_posicao2(elementos)
-        pontuacao += 1
-
-    if tesouro.retangulo.y + tesouro.altura >= TELA.ALTURA:
-        tesouro.muda_posicao(elementos)
-        tesouro.retangulo.y = -TELA.ALTURA / 2
-    return pontuacao
-
-
-def regras_obstaculos(TELA, jogador, obstaculos, margens, rodando, ganhou, perdeu):
-    for i in range(len(obstaculos)):
-        if not ganhou:
-            obstaculos[i].move_constante_para_baixo()
-            if jogador.retangulo.colliderect(obstaculos[i].retangulo):
-                perdeu = True
-                rodando = False
-            if obstaculos[i].retangulo.y >= TELA.ALTURA: 
-                obstaculos[i].muda_posicao(obstaculos + [v for v in margens.values()])
-    return rodando, ganhou, perdeu
-
-
 def chegando_no_mar(mar, rodando, ganhou):
     if mar.retangulo.y < 0:
         mar.move_constante_para_baixo()
