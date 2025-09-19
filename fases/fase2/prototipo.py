@@ -8,6 +8,8 @@ from classes import Retangulo
 from random import randint
 from funcoes_principais import fim
 from funcoes_principais import pulo_e_queda
+from funcoes_principais import roda_ganhou
+from funcoes_principais import roda_perdeu
 
 def desenha_jogo(TELA, jogador, obstaculos, planice):
     TELA.tela.fill(TELA.cor)
@@ -17,22 +19,6 @@ def desenha_jogo(TELA, jogador, obstaculos, planice):
 
     if obstaculos == []:
         pygame.draw.rect(TELA.tela, planice.cor, planice.retangulo)
-
-
-def desenha_tela_perdeu(TELA):
-    TELA.tela.fill(cores['preto'])
-    fonte = pygame.font.Font(None, 150)
-    texto = fonte.render('Perdeu', False, cores['branco'])
-    largura_texto, altura_texto = texto.get_size()
-    TELA.tela.blit(texto, ((TELA.LARGURA - largura_texto) // 2, ((TELA.ALTURA - altura_texto) // 2)))
-
-
-def desenha_tela_ganhou(TELA):
-    TELA.tela.fill(cores['preto'])
-    fonte = pygame.font.Font(None, 150)
-    texto = fonte.render('Ganhou', False, cores['branco'])
-    largura_texto, altura_texto = texto.get_size()
-    TELA.tela.blit(texto, ((TELA.LARGURA - largura_texto) // 2, ((TELA.ALTURA - altura_texto) // 2)))
 
 
 def cria_lista_obstaculos(num_obstaculos, distancia_entre_obstaculos, TELA):
@@ -130,17 +116,11 @@ def main():
         pygame.display.flip()
         clock.tick(FPS)
 
-    while perdeu:
-        desenha_tela_perdeu(TELA)
-        if fim(): break
-        pygame.display.flip()
-        clock.tick(FPS)
+    if perdeu:
+        roda_perdeu(TELA)
 
-    while ganhou:
-        desenha_tela_ganhou(TELA)
-        if fim(): break
-        pygame.display.flip()
-        clock.tick(FPS)
+    if ganhou:
+        roda_ganhou(TELA)
 
     pygame.quit()
     
