@@ -11,6 +11,7 @@ from utils.funcoes_principais import pega_evento
 from utils.funcoes_principais import passa_dialogo
 from utils.funcoes_principais import passa_notificacao
 from telas import tela_ganhou
+from importacao import resource_path
 
 def desenha_fase1(TELA, jogador, tesouros, pontuacao, 
                   PONTUACAO_MAXIMA, dialogo, detalhes, conquista):
@@ -63,17 +64,17 @@ def cria_cidade(TELA):
         x = x_inicial 
         y = (i+1) * y_inicial + i * altura_casa 
         cidade[i] = Retangulo(x, y, largura_casa, altura_casa, TELA)
-        cidade[i].define_textura('textura/casa.png')
+        cidade[i].define_textura(resource_path('textura/casa.png'))
     for i in range(5,10):
         x = 2 * x_inicial + largura_casa
         y = (i+1-5) * y_inicial + (i-5) * altura_casa 
         cidade[i] = Retangulo(x, y, largura_casa, altura_casa, TELA)
-        cidade[i].define_textura('textura/casa.png')
+        cidade[i].define_textura(resource_path('textura/casa.png'))
     for i in range(10,15):
         x = 3 * x_inicial + 2 * largura_casa
         y = (i+1-10) * y_inicial + (i-10) * altura_casa 
         cidade[i] = Retangulo(x, y, largura_casa, altura_casa, TELA)
-        cidade[i].define_textura('textura/casa.png')
+        cidade[i].define_textura(resource_path('textura/casa.png'))
     return cidade    
 
 
@@ -99,18 +100,18 @@ def fase1(TELA):
     jogador = Jogador(50, 50, 3, 6, TELA)
     jogador.cor = cores['preto']
     jogador.define_velocidade(0.5)
-    jogador.define_textura_cima('textura/cima.png')
-    jogador.define_textura_baixo('textura/baixo.png')
-    jogador.define_textura_esquerda('textura/esquerda.png')
-    jogador.define_textura_direita('textura/direita.png')
+    jogador.define_textura_cima(resource_path('textura/cima.png'))
+    jogador.define_textura_baixo(resource_path('textura/baixo.png'))
+    jogador.define_textura_esquerda(resource_path('textura/esquerda.png'))
+    jogador.define_textura_direita(resource_path('textura/direita.png'))
     jogador.textura = jogador.textura_baixo
 
     areia = Retangulo(0,0,120, 277, TELA)
     areia.cor = cores['areia']
-    areia.define_textura('textura/praia.png')
+    areia.define_textura(resource_path('textura/praia.png'))
     
     porto = Retangulo(95, 200, 61, 40, TELA)
-    porto.define_textura('textura/madeira.png')
+    porto.define_textura(resource_path('textura/madeira.png'))
 
     cidade = cria_cidade(TELA)
     detalhes = [areia, porto] + cidade
@@ -124,7 +125,7 @@ def fase1(TELA):
                 Tesouro(44.4, 150, largura_tesouro, altura_tesouro, TELA)]
     for t in tesouros:
         t.cor = cores['vermelho']
-        t.define_textura('textura/tesouro.png')
+        t.define_textura(resource_path('textura/tesouro.png'))
 
     dialogo = Caixa_de_texto(30,42.5,40,15, TELA)
     linhas_dialogo = [f'Veja, o mapa está no canto inferior direito,',

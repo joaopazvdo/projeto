@@ -11,6 +11,7 @@ from utils.funcoes_principais import pulo_e_queda
 from utils.funcoes_principais import passa_dialogo
 from telas import tela_ganhou
 from telas import tela_perdeu
+from importacao import resource_path
 from random import randint
 
 def desenha_jogo(TELA, jogador, obstaculos, planice, dialogo):
@@ -39,17 +40,17 @@ def cria_lista_obstaculos(num_obstaculos, distancia_entre_obstaculos, TELA):
     obstaculos = (num_obstaculos + 1) * [None]
     x_obstaculo = 100
     obstaculos[0] = Retangulo(-54.9,35,65,65, TELA)
-    obstaculos[0].define_textura('textura/planalto.png')
+    obstaculos[0].define_textura(resource_path('textura/planalto.png'))
     for i in range(1, len(obstaculos)):
         selecao = randint(0, 3) 
         montanha = Triangulo(x_obstaculo, 20, 60, 80, TELA)
         planalto = Retangulo(x_obstaculo, 35, 65, 65, TELA)
         if selecao == 0:
             obstaculo = planalto
-            obstaculo.define_textura('textura/planalto.png')
+            obstaculo.define_textura(resource_path('textura/planalto.png'))
         else:
             obstaculo = montanha
-            obstaculo.define_textura('textura/montanha.png')
+            obstaculo.define_textura(resource_path('textura/montanha.png'))
         obstaculos[i] = obstaculo
         x_obstaculo += distancia_entre_obstaculos
     return obstaculos
@@ -98,14 +99,14 @@ def mecanica(TELA, jogador, obstaculos, planice):
 def fase2(TELA):
     TELA.cor = cores['ceu']
 
-    TELA.define_textura('textura/ceu.png')
+    TELA.define_textura(resource_path('textura/ceu.png'))
 
     jogador = Jogador(7.8, 27, 3.4, 6.1, TELA)
     jogador.gravidade = (TELA.ALTURA/600) * 0.25
-    jogador.define_textura('textura/com_asas.png')
+    jogador.define_textura(resource_path('textura/com_asas.png'))
     obstaculos = cria_lista_obstaculos(10, 75 + 20.3, TELA) 
     planice = Retangulo(100, 95.9, 50, 4.1, TELA)
-    planice.define_textura('textura/grama.png')
+    planice.define_textura(resource_path('textura/grama.png'))
 
     dialogo = Caixa_de_texto(30,42.5,40,15, TELA)
     linhas_do_dialogo = [f'Esta ilha tem várias formas de relevo,',

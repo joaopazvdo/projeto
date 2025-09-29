@@ -6,15 +6,16 @@ from fase3 import fase3
 from fase4 import fase4
 from telas import tela_inicial
 from historia import apresenta_historia
+from importacao import resource_path
 
 def le_memoria():
-        with open('memoria.txt', 'r', encoding='utf-8') as f:
+        with open(resource_path('memoria.txt'), 'r', encoding='utf-8') as f:
             for linha in f:
                 return linha.strip()
 
 
 def altera_memoria(texto):
-    with open('memoria.txt', 'w', encoding='utf-8') as f:
+    with open(resource_path('memoria.txt'), 'w', encoding='utf-8') as f:
         f.write(f'{texto}\n')
 
 

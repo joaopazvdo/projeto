@@ -14,6 +14,7 @@ from utils.funcoes_principais import passa_dialogo
 from telas import tela_perdeu
 from telas import tela_ganhou
 from historia import final_historia
+from importacao import resource_path
 
 def desenha_jogo(TELA, jogador, rio, obstaculos, tesouro, mar, pontuacao, dialogo):
     TELA.tela.fill(TELA.cor)
@@ -55,7 +56,7 @@ def cria_obstaculos(TELA):
         for e in conjuntos_de_obstaculo[c]:
             e.define_velocidade(0.3)
             e.cor = cores['pedra']
-            e.define_textura('textura/pedras.png')
+            e.define_textura(resource_path('textura/pedras.png'))
     return conjuntos_de_obstaculo
 
 
@@ -77,7 +78,7 @@ def cria_tesouros(TELA):
     for c in tesouros:
         tesouros[c].define_velocidade(0.3)
         tesouros[c].cor = cores['dourado']
-        tesouros[c].define_textura('textura/tesouro.png')
+        tesouros[c].define_textura(resource_path('textura/tesouro.png'))
     return tesouros
 
 
@@ -126,7 +127,7 @@ def fase4(TELA):
 
     jogador = Jogador(48.85, 75, 2.3, 4.1, TELA)
     jogador.define_velocidade(0.5)
-    jogador.define_textura('textura/com_canoa.png')
+    jogador.define_textura(resource_path('textura/com_canoa.png'))
 
     dialogo = Caixa_de_texto(30,42.5,40,15, TELA)
     linhas_do_dialogo = [f'Seu irmão está nessa ilha, está na hora de busca-lo',

@@ -1,4 +1,3 @@
-from random import randint
 from .arquivo_cores import cores
 import pygame
 

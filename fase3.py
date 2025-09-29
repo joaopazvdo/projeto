@@ -10,6 +10,7 @@ from utils.funcoes_principais import cima_baixo_esquerda_direita
 from utils.funcoes_principais import passa_dialogo
 from utils.funcoes_principais import passa_notificacao
 from telas import tela_ganhou
+from importacao import resource_path
 
 def desenha_inicio(TELA, jogador, entradas, pontuacao, dialogo):
     TELA.tela.fill(TELA.cor)
@@ -100,10 +101,10 @@ def cria_jogadores(TELA):
                                         'x':jogadores['floresta_tropical'].retangulo.x, 
                                         'y':jogadores['floresta_tropical'].retangulo.y}
     for b in jogadores:
-        jogadores[b].define_textura_baixo('textura/baixo.png')
-        jogadores[b].define_textura_cima('textura/cima.png')
-        jogadores[b].define_textura_esquerda('textura/esquerda.png')
-        jogadores[b].define_textura_direita('textura/direita.png')
+        jogadores[b].define_textura_baixo(resource_path('textura/baixo.png'))
+        jogadores[b].define_textura_cima(resource_path('textura/cima.png'))
+        jogadores[b].define_textura_esquerda(resource_path('textura/esquerda.png'))
+        jogadores[b].define_textura_direita(resource_path('textura/direita.png'))
         jogadores[b].textura = jogadores[b].textura_baixo
     return jogadores
 
@@ -135,7 +136,7 @@ def cria_listas_de_tesouros(TELA):
     for b in tesouros:
         for tesouro in tesouros[b]:
             tesouro.cor = cores['dourado']
-            tesouro.define_textura('textura/tesouro.png')
+            tesouro.define_textura(resource_path('textura/tesouro.png'))
     return tesouros
 
 
@@ -171,26 +172,26 @@ def cria_entradas(TELA):
 
 def fase3(TELA):
     TELA.cria_mundo('inicio', 100, 100)
-    TELA.define_textura_mundo('inicio', 'textura/fase3.png')
+    TELA.define_textura_mundo('inicio', resource_path('textura/fase3.png'))
 
     TELA.cria_mundo('manguezal', 156, 277)
     TELA.cria_camera('manguezal')
-    TELA.define_textura_mundo('manguezal', 'textura/manguezal.png')
+    TELA.define_textura_mundo('manguezal', resource_path('textura/manguezal.png'))
     TELA.cria_mapa('manguezal',1/10, 1, 2)
 
     TELA.cria_mundo('deserto', 156, 277)
     TELA.cria_camera('deserto')
-    TELA.define_textura_mundo('deserto', 'textura/deserto.png')
+    TELA.define_textura_mundo('deserto', resource_path('textura/deserto.png'))
     TELA.cria_mapa('deserto',1/10, 83, 2)
 
     TELA.cria_mundo('savana', 156, 277)
     TELA.cria_camera('savana')
-    TELA.define_textura_mundo('savana', 'textura/savana.png')
+    TELA.define_textura_mundo('savana', resource_path('textura/savana.png'))
     TELA.cria_mapa('savana',1/10, 1, 71)
 
     TELA.cria_mundo('floresta_tropical', 156, 277)
     TELA.cria_camera('floresta_tropical')
-    TELA.define_textura_mundo('floresta_tropical', 'textura/floresta_tropical.png')
+    TELA.define_textura_mundo('floresta_tropical', resource_path('textura/floresta_tropical.png'))
     TELA.cria_mapa('floresta_tropical',1/10, 84, 71)
 
     jogadores = cria_jogadores(TELA)
